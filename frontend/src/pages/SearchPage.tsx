@@ -4,6 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import { getProducts } from "../api/getProducts";
 import { Link } from "react-router-dom";
 import SearchBar from "../components/SearchBar";
+import ProductCard from "../components/ProductCard";
 
 export default function SearchPage() {
     const [products, setProducts] = useState<Product[] | null>([]);
@@ -29,13 +30,12 @@ export default function SearchPage() {
    
 
     if (loading) {
-        return <p>Loading...</p>
+        return <p className="mt-50 text-xl">Loading...</p>
     }
 
     if (!products || products.length < 1) {
         return (
             <>
-            <h2>No products found</h2>
             <SearchBar />
             </>
     )
@@ -59,37 +59,9 @@ export default function SearchPage() {
         <Link
           key={p.url}
           to={p.url}
-          className="block border border-gray-200 rounded-xl p-4 hover:shadow-md transition bg-white"
+          className="block border border-gray-200 rounded-xl p-4 hover:shadow-lg bg-gray-300 transition"
         >
-          <h3 className="text-lg font-semibold text-gray-900 mb-1">
-            {p.name}
-          </h3>
-
-        
-          <p className="text-sm text-gray-500 mb-2">
-            From: <span className="font-medium">{p.merchant}</span>
-          </p>
-
-      
-          <p className="text-green-600 font-semibold mb-2">
-            £{p.price}
-          </p>
-
-          
-          <p className="text-sm text-yellow-600 mb-2">
-            ⭐ {p.review.rating} ({p.review.count} reviews)
-          </p>
-
-         
-          {p.extras && Object.keys(p.extras).length > 0 && (
-            <div className="mt-2 border-t pt-2 space-y-1">
-              {Object.entries(p.extras).map(([key, value]) => (
-                <p key={key} className="text-xs text-gray-500">
-                  {key}: {String(value)}
-                </p>
-              ))}
-            </div>
-          )}
+          <ProductCard product={p} />
         </Link>
       ))}
     </div>

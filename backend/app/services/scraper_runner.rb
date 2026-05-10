@@ -13,7 +13,8 @@ class ScraperRunner
     SCRAPERS.flat_map do |scraper|
       scraper.search(term)
     rescue => e
-      puts e
+      puts "Error in #{scraper.class}: #{e.message}"
+      puts e.backtrace.first(5)
       []
     end
   end

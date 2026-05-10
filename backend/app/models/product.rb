@@ -1,5 +1,5 @@
 class Product
-  attr_accessor :name, :price, :url, :merchant, :review, :extras
+  attr_accessor :name, :price, :url, :merchant, :review, :extras, :image_url
 
   def initialize(attrs = {})
     # Necessary 
@@ -7,21 +7,25 @@ class Product
     @price = attrs[:price]
     @url = attrs[:url]
     @merchant = attrs[:merchant]
-    @review = attrs[:review] || { rating: "n/a", count: 0 }
-
+    @review = attrs[:review] || nil
     # Scraper specific additions
     @extras = attrs[:extras] || {}
+    @image_url = attrs[:image_url] || nil
+    puts attrs.inspect
   end
 
   def as_json(*)
-  {
-    name: name,
-    price: price,
-    url: url,
-    merchant: merchant,
-    review: review,
-    extras: extras
-  }
+
+
+    {
+    name: @name,
+    price: @price,
+    url: @url,
+    merchant: @merchant,
+    review: @review,
+    extras: extras,
+    image_url: @image_url
+    }
   end
 
   def to_s

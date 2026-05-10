@@ -8,4 +8,5 @@ export interface Product {
     count: number
   }
   extras: Record<string, unknown>
+  image_url: string
 }

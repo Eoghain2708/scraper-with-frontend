@@ -25,9 +25,10 @@ class BNQScraper < BaseScraper
         name: item['title'],
         merchant: 'B and Q',
         url: item['url'],
-        price: item['sale_price'].to_f,
-        review: {"n/a": "n/a"},
-        extras: {"n/a": "n/a"}
+        price: item['sale_price'],
+        review: {},
+        extras: {},
+        image_url: item['thumb_image']
       })
     end
   rescue => e

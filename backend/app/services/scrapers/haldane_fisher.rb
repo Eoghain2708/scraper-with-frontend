@@ -23,15 +23,14 @@ class HaldaneFisher < BaseScraper
     return records.map do |item|
       Product.new({
         name: item["name"],
-        price: item["price"].to_f,
+        price: item["price"],
         url: item["url"],
         merchant: "Haldane Fisher",
-        review: {
-          rating: item["rating"], count: "N/A"
-        },
+        review: extract_reviews(item),
         extras: {
           in_stock: item["inStock"]
-        }
+        },
+        image_url: item["image"]
       }
       )
     end
@@ -41,6 +40,16 @@ class HaldaneFisher < BaseScraper
   end
 
   private
+
+  def extract_reviews(product)
+    review_score = product['rating']
+    review_count = product['ratingCount']
+
+    {
+      rating: review_score,
+      count: review_count
+    } if !review_score.nil?
+  end
 
   def get_payload(term)
     {

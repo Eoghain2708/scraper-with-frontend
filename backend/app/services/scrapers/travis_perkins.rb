@@ -67,7 +67,8 @@ class TravisPerkins < BaseScraper
         url: product_url(product),
         merchant: "Travis Perkins",
         review: extract_reviews(product),
-        extras: [extract_extras(product)]
+        extras: extract_extras(product),
+        image_url: product.dig('primaryImage', 'images', 0, 'url')
       }
       )
 
@@ -81,16 +82,16 @@ class TravisPerkins < BaseScraper
 
   def extract_extras(product) 
     specs = product['technicalSpecifications'] || []
-    
+
     specs.each_with_object({}) do |spec, hash|
-      key = spec['name']&.strip
-      value = spec['value']
+    key = spec['name']&.strip
+    value = spec['value']
+    next unless key && value
 
-      next if key.nil? || value.nil?
-
-      hash[key] = value
-    end
+    hash[key] = value
   end
+  end
+
 
   def format_price(price)
     return "N/A" if price.nil?
@@ -103,12 +104,16 @@ class TravisPerkins < BaseScraper
     {
       rating: review['averageRating'].to_f,
       count: review['numberOfReviews'].to_i
-    }
+    } if !review['averageRating'].to_f.nil?
+  end
+
+  def extract_image_url(product)
+    product.dig('primaryImage', 'images', 1, 'url')
   end
 
 
   def product_url(product)
-    "https://www.travisperkins.co.uk/product/#{product['sku']}"
+    "https://www.travisperkins.co.uk/search/?text=#{product['sku']}"
   end
 
 
@@ -123,6 +128,11 @@ class TravisPerkins < BaseScraper
             review {
               averageRating
               numberOfReviews
+            }
+            primaryImage {
+              images {
+                url
+              }
             }
             technicalSpecifications {
               name
