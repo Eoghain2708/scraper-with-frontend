@@ -10,6 +10,21 @@ export default function SearchPage() {
     const [products, setProducts] = useState<Product[] | null>([]);
     const [searchParams] = useSearchParams();
     const [loading, setLoading] = useState(true);
+    const [sortBy, setSortBy] = useState<"none"|"price_asc"|"price_desc">("none");
+
+    const sortedProducts = [...(products ?? [])].sort((a, b) => {
+      switch (sortBy) {
+        case "price_asc":
+          return a.price - b.price;
+        
+        case "price_desc":
+          return b.price - a.price;
+
+        default:
+          return 0;
+      }
+    })
+
     useEffect(() => {
     const q = searchParams.get("q") || ""
 
@@ -48,14 +63,21 @@ export default function SearchPage() {
       Search products
     </h1>
 
-  
+    
+      
     <div className="mb-8">
       <SearchBar />
     </div>
 
-   
+    <div className="py-5">
+    <select value={sortBy} onChange={(e) => setSortBy(e.target.value as never)}>
+      <option value="none">Sort</option>
+      <option value="price_asc">Low to High</option>
+      <option value="price_desc">High to low</option>
+    </select>
+   </div>
     <div className="space-y-4">
-      {products.map((p) => (
+      {sortedProducts.map((p) => (
         <Link
           key={p.url}
           to={p.url}

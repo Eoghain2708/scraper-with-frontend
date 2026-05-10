@@ -6,6 +6,7 @@ class SearchController < ApplicationController
     else
       []
     end
+  
 
   render json: products.map(&:as_json)
   end 

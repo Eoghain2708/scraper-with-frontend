@@ -14,6 +14,7 @@ class Product
     puts attrs.inspect
   end
 
+
   def as_json(*)
 
 
